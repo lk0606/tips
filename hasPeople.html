@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js判断用户有没有操作页面</title>
+</head>
+<body>
+
+
+<script>
+    'use strict'
+    console.log(window.devicePixelRatio)
+    window.onload = function (){
+
+        (function($){
+            var funObj = {
+                timeUserFun:'timeUserFun',
+            }
+            console.log('$',$)
+            $[funObj.timeUserFun] = function(time){
+                var time = time || 0.1;
+                var userTime = time*60;
+                var objTime = {
+                    init:0,
+                    time:function(){
+                        objTime.init += 1;
+                        if(objTime.init == userTime){
+                            console.log('用户到达未操作事件') // 用户到达未操作事件 做一些处理
+                            console.log("用户长时间没有操作页面,即将跳转到登录页面");
+                        }
+                    },
+                    eventFun:function(){
+                        clearInterval(testUser);
+                        objTime.init = 0;
+                        testUser = setInterval(objTime.time,1000);
+                    }
+                }
+
+                var testUser = setInterval(objTime.time,1000);
+
+                var body = document.querySelector('html');
+                body.addEventListener("click",objTime.eventFun);
+                body.addEventListener("keydown",objTime.eventFun);
+                body.addEventListener("mousemove",objTime.eventFun);
+                body.addEventListener("mousewheel",objTime.eventFun);
+            }
+            console.log($[funObj.timeUserFun])
+        })(window)
+
+//   直接调用 参数代表分钟数,可以有一位小数;
+        timeUserFun();
+    }
+
+</script>
+
+</body>

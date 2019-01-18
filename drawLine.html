@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>drawLine</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .top{
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: green;
+        /*z-index: 2;*/
+    }
+    #c{
+        border: 1px solid darkorange;
+        position: absolute;
+    }
+    .container{
+        /*position: absolute;*/
+        /*left: 200px;*/
+        /*top: 40px;*/
+        width: 200px;
+        height: 200px;
+        background: green;
+    }
+</style>
+<body>
+    <div class="container">
+        <!--<div class="top"></div>-->
+    </div>
+    <canvas id="c" width="0" height="0"></canvas>
+</body>
+</html>
+<script>
+window.onload = function () {
+    let con = document.querySelector(".container")
+
+    var interval
+    var c = document.querySelector('#c')
+    let ctx = c.getContext('2d')
+    let x, y, l, t, w, h
+    window.onclick= function (e) {
+        // canvas height,width
+        h = e.clientY - con.offsetHeight
+        w = e.clientX
+        console.log(h,'h')
+        c.height = h
+        c.width = w
+        console.log(c.height,'c.height')
+        // canvas定位到鼠标点击位置 x,y
+        x = e.clientX - c.width
+        y = e.clientY - c.height
+        // clear canvas
+        ctx.clearRect(0, 0, c.width, c.height)
+        // l canvas.width t canvas.height
+        l = c.width
+        t = c.height
+        c.style.left = `${x}px`
+        c.style.top = `${y}px`
+            console.log(x,y,'xy')
+        draw()
+    }
+
+    function draw() {
+        console.log(x,y,'draw')
+        interval = requestAnimationFrame(draw)
+        ctx.beginPath()
+        ctx.lineWidth = '2'
+        ctx.strokeStyle = 'red'
+        // ctx.moveTo(0,0)
+        // ctx.lineTo(240,100)
+        ctx.moveTo(l,t)
+        if( t > 8 ){
+            ctx.lineTo( l -= 2, t -= 6)
+        }
+        else if( t <= 8 && l > 8 ){
+            ctx.lineTo( l -= 2, t)
+        }
+        else {
+            ctx.arc(l-2, t,2,0,2*Math.PI)
+            ctx.fillStyle = 'red'
+            ctx.fill()
+            window.cancelAnimationFrame(interval)
+            console.log('else')
+        }
+        ctx.stroke()
+    }
+}
+</script>
